@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoList from './components/TodoList'
 import TodoForm from './components/TodoForm'
+import './components/Todo.css'
 
 
 const initialState = [
@@ -25,12 +26,46 @@ class App extends React.Component {
     }
   }
 
-  updateTodo = event => {
+  updateTodo = taskName => {
+    const timeStamp = Date.now()
+
+    const newTask = {
+        task: `${taskName}`,
+        id: `${timeStamp}`,
+        completed: false
+    }
+
     this.setState({
-      ...this.state.todo,
-      
+        todo: [...this.state.todo, newTask ]
     })
   }
+
+  toggleCompleted = event => {
+    event.persist()
+
+    console.log(event.target.id)
+
+    this.setState({
+        todo: this.state.todo.map( item => {
+            if (item.id == event.target.id) {
+                return {
+                    ...item,
+                    completed: !item.completed
+                } 
+            } else {
+                return item
+            }
+        })
+    })
+  }
+
+  clearCompleted = () => {
+    //function to clear completed tasks
+    this.setState({
+        todo: this.state.todo.filter(item => !item.completed)
+    })
+  }
+
   // you will need a place to store your state in this component.
   
   // design `App` to be the parent component of your application.
@@ -39,8 +74,8 @@ class App extends React.Component {
     return (
       <div>
         <h2>Welcome to your Todo App!</h2>
-        <TodoList todo={this.state.todo} />
-        <TodoForm updateTodo={this.state.updateTodo} />
+        <TodoList todo={this.state.todo} toggleCompleted={this.toggleCompleted} />
+        <TodoForm updateTodo={this.updateTodo} clearCompleted={this.clearCompleted} />
       </div>
     );
   }

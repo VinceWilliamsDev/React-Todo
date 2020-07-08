@@ -1,4 +1,5 @@
 import React from 'react'
+import Todo from'./Todo'
 
 export default function TodoList(props) {
     // console.log(props)
@@ -7,9 +8,7 @@ export default function TodoList(props) {
         <div>
             {props.todo.map(item => {
                 return(
-                    <div key={item.id}>
-                        <h3>{item.task}</h3>
-                    </div>
+                    <Todo key={item.id} item={item} toggleCompleted={props.toggleCompleted} />
                 )
             })}
         </div>
